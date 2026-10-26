@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Rincón del Crochet - Tu Espacio Tejido a Mano</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti for goal completion celebration -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        terracota: {
+                            50: '#FDF7F5',
+                            100: '#FAF0EB',
+                            200: '#F4DCCE',
+                            300: '#E7B59F',
+                            500: '#D97757',
+                            600: '#C05C3D',
+                            700: '#9E4429',
+                        },
+                        crema: {
+                            50: '#FAF7F2',
+                            100: '#F5EFE6',
+                            200: '#E6D9CC',
+                        },
+                        sage: {
+                            100: '#E8EFEA',
+                            500: '#7FA08D',
+                            600: '#648371',
+                        },
+                        warmdark: '#3A322F',
+                    },
+                    fontFamily: {
+                        display: ['Comfortaa', 'cursive'],
+                        body: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FAF7F2;
+            color: #3A322F;
+        }
+        h1, h2, h3, .font-display {
+            font-family: 'Comfortaa', cursive;
+        }
+        /* Custom subtle scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F5EFE6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D97757;
+            border-radius: 4px;
+        }
+        .yarn-ball-bg {
+            background-image: radial-gradient(#D97757 0.75px, transparent 0.75px), radial-gradient(#D97757 0.75px, #FAF7F2 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            opacity: 0.15;
+        }
+        .toast-slide {
+            animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="relative min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-40 bg-crema-50/90 backdrop-blur-md border-b border-terracota-200/50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-11 h-11 rounded-2xl bg-terracota-500 text-white flex items-center justify-center text-xl shadow-md group-hover:scale-105 transition-transform">
+                    <i class="fa-solid fa-scroll"></i>
+                </div>
+                <div>
+                    <span class="font-display font-bold text-xl text-terracota-700 block leading-none">El Rincón</span>
+                    <span class="text-xs text-sage-600 font-semibold tracking-wider uppercase">del Crochet</span>
+                </div>
+            </a>
+
+            <!-- Desktop Menu -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-warmdark/80">
+                <a href="#contador" class="hover:text-terracota-500 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-list-check text-terracota-500"></i> Contador</a>
+                <a href="#patrones" class="hover:text-terracota-500 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-book-open text-terracota-500"></i> Patrones</a>
+                <a href="#calculadora" class="hover:text-terracota-500 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-calculator text-terracota-500"></i> Calculadora</a>
+                <a href="#diccionario" class="hover:text-terracota-500 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-graduation-cap text-terracota-500"></i> Puntos</a>
+                <a href="#blog" class="hover:text-terracota-500 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-lightbulb text-terracota-500"></i> Consejos</a>
+            </nav>
+
+            <!-- Quick Action Button -->
+            <div class="hidden sm:flex items-center gap-3">
+                <a href="#contador" class="bg-terracota-500 hover:bg-terracota-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                    <i class="fa-solid fa-plus-circle mr-1.5"></i> Mi Proyecto
+                </a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-btn" class="md:hidden p-2 text-warmdark hover:text-terracota-500 focus:outline-none">
+                <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-crema-100 border-b border-terracota-200 px-4 pt-3 pb-6 space-y-3">
+            <a href="#contador" class="mobile-link block px-3 py-2 rounded-lg text-warmdark hover:bg-terracota-100 hover:text-terracota-600 font-medium"><i class="fa-solid fa-list-check mr-2"></i> Contador de Vueltas</a>
+            <a href="#patrones" class="mobile-link block px-3 py-2 rounded-lg text-warmdark hover:bg-terracota-100 hover:text-terracota-600 font-medium"><i class="fa-solid fa-book-open mr-2"></i> Catálogo de Patrones</a>
+            <a href="#calculadora" class="mobile-link block px-3 py-2 rounded-lg text-warmdark hover:bg-terracota-100 hover:text-terracota-600 font-medium"><i class="fa-solid fa-calculator mr-2"></i> Calculadora de Lana</a>
+            <a href="#diccionario" class="mobile-link block px-3 py-2 rounded-lg text-warmdark hover:bg-terracota-100 hover:text-terracota-600 font-medium"><i class="fa-solid fa-graduation-cap mr-2"></i> Diccionario de Puntos</a>
+            <a href="#blog" class="mobile-link block px-3 py-2 rounded-lg text-warmdark hover:bg-terracota-100 hover:text-terracota-600 font-medium"><i class="fa-solid fa-lightbulb mr-2"></i> Tips y Consejos</a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative py-16 lg:py-24 overflow-hidden">
+        <div class="absolute inset-0 yarn-ball-bg pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-7 text-center lg:text-left space-y-6">
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-terracota-100 text-terracota-700 text-xs font-bold tracking-wide uppercase border border-terracota-200">
+                        <i class="fa-solid fa-heart text-terracota-500"></i> Hecho con amor punto a punto
+                    </span>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-warmdark leading-tight">
+                        Tu espacio de calma, hilos y <span class="text-terracota-500 underline decoration-terracota-200 decoration-wavy">creatividad</span>.
+                    </h1>
+                    <p class="text-lg text-warmdark/70 max-w-2xl mx-auto lg:mx-0">
+                        Bienvenido a la comunidad donde cada lazada cuenta. Lleva el control de tus vueltas, calcula el hilo necesario para tus prendas y descubre patrones gratuitos paso a paso.
+                    </p>
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#contador" class="bg-terracota-500 hover:bg-terracota-600 text-white font-semibold px-6 py-3.5 rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2 transform hover:-translate-y-0.5">
+                            <i class="fa-solid fa-play"></i> Empezar Contador
+                        </a>
+                        <a href="#patrones" class="bg-white hover:bg-crema-100 text-warmdark font-semibold px-6 py-3.5 rounded-2xl border border-terracota-200 shadow-sm transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-shapes text-terracota-500"></i> Ver Patrones
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Decorative Hero Card -->
+                <div class="lg:col-span-5 relative">
+                    <div class="relative mx-auto max-w-md bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-terracota-100 transform lg:rotate-1 hover:rotate-0 transition-transform">
+                        <div class="flex items-center justify-between pb-4 border-b border-gray-100 mb-6">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-sage-100 text-sage-600 flex items-center justify-center">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-warmdark text-sm">Inspiración del día</h4>
+                                    <p class="text-xs text-gray-500">Comunidad Crochet</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-terracota-500 bg-terracota-50 px-2.5 py-1 rounded-full">Proceso</span>
+                        </div>
+                        <blockquote class="text-sm italic text-warmdark/80 mb-6 leading-relaxed">
+                            "Tejer no es solo entrelazar lana, es tejer paciencia, calmar la mente y dar forma a momentos inolvidables con tus propias manos."
+                        </blockquote>
+                        <div class="bg-crema-50 p-4 rounded-2xl flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🧶</span>
+                                <div>
+                                    <p class="text-xs font-semibold text-warmdark">Tip Rápido</p>
+                                    <p class="text-xs text-gray-500">Usa marcadores al iniciar cada vuelta.</p>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-circle-check text-sage-500"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 1: CONTADOR DE VUELTAS (ROW COUNTER) -->
+    <section id="contador" class="py-16 bg-white border-y border-terracota-100 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-xs font-bold text-sage-600 uppercase tracking-widest bg-sage-100 px-3 py-1 rounded-full">Herramienta Interactiva</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-warmdark mt-3">Contador de Vueltas y Filas</h2>
+                <p class="text-warmdark/70 mt-2">Nunca más pierdas la cuenta de tus proyectos. Tu avance se guarda automáticamente en tu navegador.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Project Selector & Creator -->
+                <div class="lg:col-span-4 bg-crema-50 p-6 rounded-3xl border border-terracota-100 space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-warmdark flex items-center gap-2">
+                            <i class="fa-solid fa-folder-open text-terracota-500"></i> Mis Proyectos
+                        </h3>
+                        <button onclick="openNewProjectModal()" class="text-xs bg-terracota-500 hover:bg-terracota-600 text-white font-semibold px-3 py-1.5 rounded-lg transition-colors">
+                            <i class="fa-solid fa-plus mr-1"></i> Nuevo
+                        </button>
+                    </div>
+
+                    <!-- Project Dropdown -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-500 mb-2">Seleccionar Proyecto Activo</label>
+                        <select id="project-select" onchange="switchProject(this.value)" class="w-full bg-white border border-terracota-200 rounded-xl px-4 py-3 text-sm font-medium focus:ring-2 focus:ring-terracota-500 focus:outline-none">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+
+                    <!-- Project List Detail -->
+                    <div id="projects-list-container" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+                        <!-- Dynamic list items -->
+                    </div>
+
+                    <div class="pt-2 border-t border-terracota-200/60 flex justify-between text-xs text-warmdark/60">
+                        <span id="saved-status-text"><i class="fa-solid fa-floppy-disk mr-1"></i> Guardado automático</span>
+                        <button onclick="soundToggle()" id="sound-btn" class="hover:text-terracota-500 transition-colors">
+                            <i class="fa-solid fa-volume-high mr-1"></i> Sonido: ON
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Counter Display -->
+                <div class="lg:col-span-8 bg-crema-50 p-6 sm:p-10 rounded-3xl border border-terracota-100 flex flex-col justify-between space-y-8">
+                    
+                    <!-- Header of Active Project -->
+                    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-terracota-200/60 pb-4">
+                        <div>
+                            <h3 id="active-project-name" class="text-2xl font-bold text-warmdark">Mi Proyecto Crochet</h3>
+                            <p id="active-project-date" class="text-xs text-gray-500">Iniciado recientemente</p>
+                        </div>
+                        <button onclick="confirmDeleteProject()" class="text-xs text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors">
+                            <i class="fa-solid fa-trash mr-1"></i> Eliminar Proyecto
+                        </button>
+                    </div>
+
+                    <!-- Counter Center Unit -->
+                    <div class="text-center py-4">
+                        <span class="text-xs font-bold uppercase text-terracota-600 tracking-widest block mb-2">Vuelta / Fila Actual</span>
+                        <div id="counter-value" class="text-7xl sm:text-8xl font-black text-warmdark tracking-tight my-2 font-display">0</div>
+                        <p id="target-counter-label" class="text-sm font-medium text-warmdark/70">Meta: <span id="target-display">0</span> vueltas</p>
+                    </div>
+
+                    <!-- Counter Controls -->
+                    <div class="grid grid-cols-3 gap-3 sm:gap-6 max-w-md mx-auto w-full">
+                        <button onclick="adjustCounter(-1)" class="bg-white hover:bg-terracota-100 border-2 border-terracota-200 text-warmdark font-bold text-2xl py-4 rounded-2xl shadow-sm hover:shadow active:scale-95 transition-all flex items-center justify-center">
+                            <i class="fa-solid fa-minus"></i>
+                        </button>
+                        <button onclick="resetCounter()" class="bg-white hover:bg-gray-100 border-2 border-gray-200 text-gray-600 font-bold text-sm py-4 rounded-2xl shadow-sm active:scale-95 transition-all flex flex-col items-center justify-center gap-1">
+                            <i class="fa-solid fa-rotate-right text-base"></i>
+                            <span class="text-[10px] uppercase">Reiniciar</span>
+                        </button>
+                        <button onclick="adjustCounter(1)" class="bg-terracota-500 hover:bg-terracota-600 text-white font-bold text-3xl py-4 rounded-2xl shadow-md hover:shadow-lg active:scale-95 transition-all flex items-center justify-center">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+
+                    <!-- Progress Bar & Target Edit -->
+                    <div class="space-y-3 pt-4 border-t border-terracota-200/60">
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="font-bold text-warmdark">Progreso del proyecto</span>
+                            <span id="progress-percent" class="font-bold text-terracota-600">0%</span>
+                        </div>
+                        <div class="w-full bg-terracota-100 h-4 rounded-full overflow-hidden p-0.5">
+                            <div id="progress-bar" class="bg-terracota-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+
+                        <!-- Target Input & Notes -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Definir Meta de Vueltas</label>
+                                <input type="number" id="target-input" min="1" placeholder="Ej. 50" onchange="updateTarget(this.value)" class="w-full bg-white border border-terracota-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-terracota-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Notas del Proyecto</label>
+                                <input type="text" id="project-notes" placeholder="Ej. Aguja 3.5mm, lana rosa" onchange="updateNotes(this.value)" class="w-full bg-white border border-terracota-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-terracota-500 focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: CATÁLOGO DE PATRONES GRATIS -->
+    <section id="patrones" class="py-16 bg-crema-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-10">
+                <span class="text-xs font-bold text-terracota-600 uppercase tracking-widest bg-terracota-100 px-3 py-1 rounded-full">Biblioteca de Inspiración</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-warmdark mt-3">Patrones Gratuitos Paso a Paso</h2>
+                <p class="text-warmdark/70 mt-2">Encuentra tu próximo proyecto. Filtra por categoría y nivel de dificultad.</p>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="flex flex-wrap items-center justify-center gap-2 mb-8">
+                <button onclick="filterPatterns('all', 'category')" class="filter-cat-btn active bg-terracota-500 text-white font-medium text-xs sm:text-sm px-4 py-2 rounded-xl transition-all" data-cat="all">Todos</button>
+                <button onclick="filterPatterns('amigurumi', 'category')" class="filter-cat-btn bg-white hover:bg-terracota-100 text-warmdark border border-terracota-200 font-medium text-xs sm:text-sm px-4 py-2 rounded-xl transition-all" data-cat="amigurumi">Amigurumis</button>
+                <button onclick="filterPatterns('mantas', 'category')" class="filter-cat-btn bg-white hover:bg-terracota-100 text-warmdark border border-terracota-200 font-medium text-xs sm:text-sm px-4 py-2 rounded-xl transition-all" data-cat="mantas">Mantas</button>
+                <button onclick="filterPatterns('ropa', 'category')" class="filter-cat-btn bg-white hover:bg-terracota-100 text-warmdark border border-terracota-200 font-medium text-xs sm:text-sm px-4 py-2 rounded-xl transition-all" data-cat="ropa">Ropa</button>
+                <button onclick="filterPatterns('accesorios', 'category')" class="filter-cat-btn bg-white hover:bg-terracota-100 text-warmdark border border-terracota-200 font-medium text-xs sm:text-sm px-4 py-2 rounded-xl transition-all" data-cat="accesorios">Accesorios</button>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-2 mb-10 text-xs">
+                <span class="font-bold text-gray-500 mr-2">Dificultad:</span>
+                <button onclick="filterPatterns('all', 'level')" class="filter-lvl-btn active bg-warmdark text-white px-3 py-1 rounded-lg" data-lvl="all">Cualquiera</button>
+                <button onclick="filterPatterns('Principiante', 'level')" class="filter-lvl-btn bg-white text-warmdark border border-gray-200 px-3 py-1 rounded-lg" data-lvl="Principiante">Principiante</button>
+                <button onclick="filterPatterns('Intermedio', 'level')" class="filter-lvl-btn bg-white text-warmdark border border-gray-200 px-3 py-1 rounded-lg" data-lvl="Intermedio">Intermedio</button>
+                <button onclick="filterPatterns('Avanzado', 'level')" class="filter-lvl-btn bg-white text-warmdark border border-gray-200 px-3 py-1 rounded-lg" data-lvl="Avanzado">Avanzado</button>
+            </div>
+
+            <!-- Pattern Cards Grid -->
+            <div id="patterns-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Dynamic Pattern Cards Populated via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: CALCULADORA DE LANA (YARN CALCULATOR) -->
+    <section id="calculadora" class="py-16 bg-white border-y border-terracota-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="text-xs font-bold text-sage-600 uppercase tracking-widest bg-sage-100 px-3 py-1 rounded-full">Calculadora de Material</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-warmdark">¿Cuánta lana necesitas para tu proyecto?</h2>
+                    <p class="text-warmdark/70 leading-relaxed">
+                        Evita quedarte sin hilo a la mitad de tu labor o comprar metros de más. Selecciona la prenda y el grosor de la lana para obtener una estimación aproximada en metros y ovillos estándar (50g / 100g).
+                    </p>
+                    
+                    <div class="bg-crema-50 p-5 rounded-2xl border border-terracota-100 space-y-3 text-xs text-warmdark/80">
+                        <div class="flex items-start gap-2">
+                            <i class="fa-solid fa-circle-info text-terracota-500 text-sm mt-0.5"></i>
+                            <p><strong>Nota:</strong> Los cálculos son estimados para punto bajo/medio a tensión estándar. Si usas puntos calados o trenzados muy tupidos, añade un 10% adicional.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 bg-crema-50 p-6 sm:p-8 rounded-3xl border border-terracota-100 shadow-sm">
+                    <form id="yarn-form" onsubmit="event.preventDefault(); calculateYarn();" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            
+                            <!-- Project Type -->
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-gray-600 mb-2">Tipo de Proyecto</label>
+                                <select id="calc-project" class="w-full bg-white border border-terracota-200 rounded-xl px-4 py-3 text-sm font-medium focus:ring-2 focus:ring-terracota-500 focus:outline-none">
+                                    <option value="manta_m">Manta Mediana (120 x 150 cm)</option>
+                                    <option value="manta_l">Manta Grande / Cama (160 x 200 cm)</option>
+                                    <option value="jersey">Jersey / Suéter (Talla M)</option>
+                                    <option value="bufanda">Bufanda Larga</option>
+                                    <option value="gorro">Gorro Beanie Adulto</option>
+                                    <option value="amigurumi_m">Amigurumi Mediano (20 cm)</option>
+                                    <option value="bolso">Bolso / Tote Bag</option>
+                                </select>
+                            </div>
+
+                            <!-- Yarn Weight / Thickness -->
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-gray-600 mb-2">Grosor del Hilo</label>
+                                <select id="calc-yarn" class="w-full bg-white border border-terracota-200 rounded-xl px-4 py-3 text-sm font-medium focus:ring-2 focus:ring-terracota-500 focus:outline-none">
+                                    <option value="fino">Fino / Fine (Sport, Aguja 2.5 - 3.5mm)</option>
+                                    <option value="medio" selected>Medio / Medium (Worsted, Aguja 4 - 5mm)</option>
+                                    <option value="grueso">Grueso / Bulky (Chunky, Aguja 6 - 8mm)</option>
+                                    <option value="supergrueso">Super Grueso (Aguja 9mm+)</option>
+                                </select>
+                            </div>
+
+                            <!-- Tension / Gauge Factor -->
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-gray-600 mb-2">Tensión de Tejido</label>
+                                <select id="calc-tension" class="w-full bg-white border border-terracota-200 rounded-xl px-4 py-3 text-sm font-medium focus:ring-2 focus:ring-terracota-500 focus:outline-none">
+                                    <option value="apretada">Apretada (Tupido)</option>
+                                    <option value="normal" selected>Normal / Estándar</option>
+                                    <option value="holgada">Holgada (Calado / Suelto)</option>
+                                </select>
+                            </div>
+
+                            <!-- Custom Skein Size -->
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-gray-600 mb-2">Gramaje por Ovillo</label>
+                                <select id="calc-skein" class="w-full bg-white border border-terracota-200 rounded-xl px-4 py-3 text-sm font-medium focus:ring-2 focus:ring-terracota-500 focus:outline-none">
+                                    <option value="50">50 gramos</option>
+                                    <option value="100" selected>100 gramos</option>
+                                    <option value="200">200 gramos</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <button type="button" onclick="calculateYarn()" class="w-full bg-terracota-500 hover:bg-terracota-600 text-white font-bold py-3.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-calculator"></i> Calcular Lana Necesaria
+                        </button>
+                    </form>
+
+                    <!-- Results Output Box -->
+                    <div id="calc-result" class="mt-8 p-6 bg-white rounded-2xl border-2 border-terracota-200 space-y-4">
+                        <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                            <span class="text-xs font-bold uppercase text-gray-500">Estimación Resultante</span>
+                            <span class="text-xs font-bold text-terracota-600 bg-terracota-50 px-2.5 py-1 rounded-full"><i class="fa-solid fa-check mr-1"></i> Aproximado</span>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-center">
+                            <div class="bg-crema-50 p-3 rounded-xl border border-terracota-100">
+                                <span class="text-2xl font-bold text-warmdark block" id="res-meters">1200 m</span>
+                                <span class="text-[11px] text-gray-500 uppercase font-medium">Metros Totales</span>
+                            </div>
+                            <div class="bg-crema-50 p-3 rounded-xl border border-terracota-100">
+                                <span class="text-2xl font-bold text-terracota-600 block" id="res-skeins">12 ovillos</span>
+                                <span class="text-[11px] text-gray-500 uppercase font-medium">Ovillos Aprox.</span>
+                            </div>
+                            <div class="bg-crema-50 p-3 rounded-xl border border-terracota-100 col-span-2 sm:col-span-1">
+                                <span class="text-2xl font-bold text-sage-600 block" id="res-grams">600 g</span>
+                                <span class="text-[11px] text-gray-500 uppercase font-medium">Peso Total</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: DICCIONARIO DE PUNTOS BÁSICOS -->
+    <section id="diccionario" class="py-16 bg-crema-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-10">
+                <span class="text-xs font-bold text-sage-600 uppercase tracking-widest bg-sage-100 px-3 py-1 rounded-full">Guía de Aprendizaje</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-warmdark mt-3">Diccionario de Puntos Básicos</h2>
+                <p class="text-warmdark/70 mt-2">Consulta los nombres, equivalencias en inglés y abreviaturas universales.</p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="max-w-md mx-auto mb-10 relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-terracota-400"></i>
+                <input type="text" id="stitch-search" oninput="searchStitches(this.value)" placeholder="Buscar punto (ej. cadeneta, pb, magic ring)..." class="w-full bg-white border border-terracota-200 rounded-2xl pl-11 pr-4 py-3.5 text-sm font-medium shadow-sm focus:ring-2 focus:ring-terracota-500 focus:outline-none">
+            </div>
+
+            <!-- Stitch Grid -->
+            <div id="stitch-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamic Stitches populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: BLOG Y CONSEJOS DE TEJIDO -->
+    <section id="blog" class="py-16 bg-white border-t border-terracota-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-xs font-bold text-terracota-600 uppercase tracking-widest bg-terracota-100 px-3 py-1 rounded-full">Sabiduría Crochetera</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-warmdark mt-3">Consejos y Guías Rápidas</h2>
+                <p class="text-warmdark/70 mt-2">Trucos para mejorar tus acabados, cuidar tus prendas y disfrutar más del tejido.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Tip 1 -->
+                <article class="bg-crema-50 rounded-3xl p-6 border border-terracota-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-terracota-100 text-terracota-600 flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-ruler-combined"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-warmdark">¿Cómo elegir el ganchillo adecuado?</h3>
+                        <p class="text-sm text-warmdark/70 leading-relaxed">
+                            Mira la etiqueta de tu ovillo para la recomendación base. Si tejes muy apretado, sube medio número de aguja. Si quieres que un amigurumi no pierda relleno, baja medio número.
+                        </p>
+                    </div>
+                    <div class="pt-6 border-t border-terracota-200/50 mt-6 flex items-center justify-between text-xs font-bold text-terracota-600">
+                        <span>Lectura: 2 min</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </article>
+
+                <!-- Tip 2 -->
+                <article class="bg-crema-50 rounded-3xl p-6 border border-terracota-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-sage-100 text-sage-600 flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-palette"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-warmdark">Cambio de color invisible</h3>
+                        <p class="text-sm text-warmdark/70 leading-relaxed">
+                            Realiza la última lazada del punto anterior con el nuevo color de lana. De esta forma, el bucle en tu aguja ya tendrá el nuevo tono antes de iniciar el siguiente punto.
+                        </p>
+                    </div>
+                    <div class="pt-6 border-t border-terracota-200/50 mt-6 flex items-center justify-between text-xs font-bold text-sage-600">
+                        <span>Lectura: 3 min</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </article>
+
+                <!-- Tip 3 -->
+                <article class="bg-crema-50 rounded-3xl p-6 border border-terracota-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-terracota-100 text-terracota-600 flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-water"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-warmdark">El secreto del bloqueado</h3>
+                        <p class="text-sm text-warmdark/70 leading-relaxed">
+                            Bloquear tus prendas de ganchillo (humedecerlas y fijarlas con alfileres en una esterilla hasta secarse) define los puntos, alinea los bordes y da una caída profesional espectacular.
+                        </p>
+                    </div>
+                    <div class="pt-6 border-t border-terracota-200/50 mt-6 flex items-center justify-between text-xs font-bold text-terracota-600">
+                        <span>Lectura: 4 min</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-warmdark text-crema-100 pt-16 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 pb-12 border-b border-gray-700">
+                
+                <div class="md:col-span-5 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-terracota-500 text-white flex items-center justify-center text-lg font-bold">
+                            <i class="fa-solid fa-scroll"></i>
+                        </div>
+                        <span class="font-display font-bold text-xl text-white">El Rincón del Crochet</span>
+                    </div>
+                    <p class="text-sm text-gray-400 max-w-sm leading-relaxed">
+                        Un portal diseñado con cariño para tejedores apasionados. Encuentra herramientas, patrones e inspiración para tus proyectos día a día.
+                    </p>
+                </div>
+
+                <div class="md:col-span-3 space-y-3">
+                    <h4 class="font-bold text-white text-sm uppercase tracking-wider">Enlaces Rápidos</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#contador" class="hover:text-terracota-500 transition-colors">Contador de Vueltas</a></li>
+                        <li><a href="#patrones" class="hover:text-terracota-500 transition-colors">Patrones Gratuitos</a></li>
+                        <li><a href="#calculadora" class="hover:text-terracota-500 transition-colors">Calculadora de Hilo</a></li>
+                        <li><a href="#diccionario" class="hover:text-terracota-500 transition-colors">Diccionario de Puntos</a></li>
+                    </ul>
+                </div>
+
+                <div class="md:col-span-4 space-y-3">
+                    <h4 class="font-bold text-white text-sm uppercase tracking-wider">Comunidad</h4>
+                    <p class="text-xs text-gray-400">Únete a nuestro boletín mensual para recibir nuevos patrones gratis en tu correo.</p>
+                    <form onsubmit="event.preventDefault(); showToast('¡Gracias por suscribirte al rincón!');" class="flex gap-2">
+                        <input type="email" placeholder="tu.email@ejemplo.com" required class="bg-gray-800 text-white border border-gray-700 rounded-xl px-3 py-2 text-sm w-full focus:outline-none focus:border-terracota-500">
+                        <button type="submit" class="bg-terracota-500 hover:bg-terracota-600 text-white px-4 py-2 rounded-xl text-sm font-bold transition-colors">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+                <p>&copy; 2026 El Rincón del Crochet. Todos los derechos reservados.</p>
+                <div class="flex gap-4 text-lg text-gray-400">
+                    <a href="#" class="hover:text-terracota-500"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="hover:text-terracota-500"><i class="fa-brands fa-pinterest"></i></a>
+                    <a href="#" class="hover:text-terracota-500"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL: DETALLES DE PATRÓN -->
+    <div id="pattern-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-terracota-100 shadow-2xl relative animate-fadeIn">
+            <button onclick="closePatternModal()" class="absolute top-4 right-4 w-9 h-9 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center text-gray-600 transition-colors">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="p-6 sm:p-8 space-y-6">
+                <!-- Modal Banner Info -->
+                <div class="space-y-2">
+                    <span id="modal-category" class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-terracota-100 text-terracota-700 rounded-full">Amigurumi</span>
+                    <h3 id="modal-title" class="text-2xl sm:text-3xl font-bold text-warmdark">Nombre del Patrón</h3>
+                    <div class="flex flex-wrap gap-4 text-xs text-gray-500 pt-1">
+                        <span id="modal-level"><i class="fa-solid fa-layer-group text-terracota-500 mr-1"></i> Principiante</span>
+                        <span id="modal-time"><i class="fa-solid fa-clock text-terracota-500 mr-1"></i> 2 Horas</span>
+                        <span id="modal-hook"><i class="fa-solid fa-wand-sparkles text-terracota-500 mr-1"></i> Aguja 3.5mm</span>
+                    </div>
+                </div>
+
+                <!-- Materials Needed -->
+                <div class="bg-crema-50 p-4 sm:p-5 rounded-2xl border border-terracota-100 space-y-2">
+                    <h4 class="font-bold text-sm text-warmdark flex items-center gap-2">
+                        <i class="fa-solid fa-basket-shopping text-terracota-500"></i> Materiales Necesarios:
+                    </h4>
+                    <ul id="modal-materials" class="list-disc list-inside text-xs sm:text-sm text-warmdark/80 space-y-1">
+                        <!-- Dynamic list -->
+                    </ul>
+                </div>
+
+                <!-- Abbreviations Key -->
+                <div class="space-y-2">
+                    <h4 class="font-bold text-sm text-warmdark flex items-center gap-2">
+                        <i class="fa-solid fa-key text-terracota-500"></i> Abreviaturas Usadas:
+                    </h4>
+                    <div id="modal-abbreviations" class="flex flex-wrap gap-2 text-xs">
+                        <!-- Dynamic abbreviations tags -->
+                    </div>
+                </div>
+
+                <!-- Step by Step Instructions -->
+                <div class="space-y-4 pt-2 border-t border-gray-100">
+                    <h4 class="font-bold text-base text-warmdark flex items-center gap-2">
+                        <i class="fa-solid fa-list-ol text-terracota-500"></i> Instrucciones Paso a Paso:
+                    </h4>
+                    <div id="modal-steps" class="space-y-3 text-xs sm:text-sm text-warmdark/80">
+                        <!-- Dynamic step by step list -->
+                    </div>
+                </div>
+
+                <div class="pt-4 flex justify-end">
+                    <button onclick="closePatternModal()" class="bg-terracota-500 hover:bg-terracota-600 text-white font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors">
+                        ¡Entendido, a tejer!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: NUEVO PROYECTO -->
+    <div id="new-project-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
+            <button onclick="closeNewProjectModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <h3 class="text-xl font-bold text-warmdark flex items-center gap-2">
+                <i class="fa-solid fa-folder-plus text-terracota-500"></i> Crear Nuevo Proyecto
+            </h3>
+
+            <form onsubmit="event.preventDefault(); createProject();" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-warmdark mb-1">Nombre del Proyecto</label>
+                    <input type="text" id="new-proj-name" required placeholder="Ej. Amigurumi Osito Teddy" class="w-full bg-crema-50 border border-terracota-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-terracota-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-warmdark mb-1">Meta de Vueltas / Filas (Opcional)</label>
+                    <input type="number" id="new-proj-target" min="1" placeholder="Ej. 45" class="w-full bg-crema-50 border border-terracota-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-terracota-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-warmdark mb-1">Notas iniciales</label>
+                    <input type="text" id="new-proj-notes" placeholder="Ej. Hilo algodón, Aguja 3mm" class="w-full bg-crema-50 border border-terracota-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-terracota-500 focus:outline-none">
+                </div>
+
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeNewProjectModal()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs px-4 py-2.5 rounded-xl">Cancelar</button>
+                    <button type="submit" class="bg-terracota-500 hover:bg-terracota-600 text-white font-semibold text-xs px-5 py-2.5 rounded-xl shadow">Crear Proyecto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- JAVASCRIPT APP LOGIC -->
+    <script>
+        /* ==========================================================================
+           DATA DEFINITIONS
+           ========================================================================== */
+        
+        // Initial Patterns Data
+        const PATTERNS = [
+            {
+                id: 'pat-1',
+                title: 'Osezito de Peluche Amigurumi',
+                category: 'amigurumi',
+                level: 'Principiante',
+                time: '3-4 Horas',
+                hook: '3.0 mm',
+                description: 'Un dulce osito amigurumi clásico ideal para regalar a bebés o principiantes.',
+                image: 'https://images.unsplash.com/photo-1558679908-541bcf1249ff?auto=format&fit=crop&w=600&q=80',
+                materials: [
+                    '100g de Hilo de Algodón color Marrón Pastel',
+                    'Aguja de crochet de 3.0 mm',
+                    'Ojos de seguridad de 8 mm',
+                    'Relleno sintético (napa/vellón siliconado)',
+                    'Aguja lanera y marcador de vueltas'
+                ],
+                abbreviations: ['AM: Anillo Mágico', 'pb: Punto Bajo', 'aum: Aumento', 'dism: Disminución'],
+                steps: [
+                    '<strong>V1:</strong> AM de 6 pb (6)',
+                    '<strong>V2:</strong> 1 aum en cada pb (12)',
+                    '<strong>V3:</strong> [1 pb, 1 aum] x6 (18)',
+                    '<strong>V4-V8:</strong> 1 pb en cada punto (18)',
+                    '<strong>V9:</strong> [1 pb, 1 dism] x6 (12)',
+                    'Colocar ojos de seguridad entre V6 y V7. Rellenar firmemente.',
+                    '<strong>V10:</strong> 6 dism (6). Cerrar con aguja lanera.'
+                ]
+            },
+            {
+                id: 'pat-2',
+                title: 'Manta de Cuadros Granny Square',
+                category: 'mantas',
+                level: 'Principiante',
+                time: '10+ Horas',
+                hook: '4.5 mm',
+                description: 'El clásico diseño vintage de cuadros de la abuela con tonos pastel acogedores.',
+                image: 'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=600&q=80',
+                materials: [
+                    '400g lana grosor medio en colores pastel surtidos',
+                    'Aguja de crochet de 4.5 mm',
+                    'Tijeras y aguja de coser lana'
+                ],
+                abbreviations: ['cad: Cadeneta', 'pa: Punto Alto', 'pe: Punto Enano / Deslizado'],
+                steps: [
+                    'Hacer un anillo mágico o 4 cad unidas con pe.',
+                    '<strong>V1:</strong> 3 cad (cuenta como 1 pa), 2 pa, 2 cad, [3 pa, 2 cad] x3 en el centro. Unir con pe.',
+                    '<strong>V2:</strong> Ir con pe a la esquina. (3 pa, 2 cad, 3 pa) en la esquina, 1 cad de separación entre lados.',
+                    'Repetir hasta alcanzar el tamaño deseado del cuadro. Unir los cuadros con punto enano.'
+                ]
+            },
+            {
+                id: 'pat-3',
+                title: 'Gorro Beanie Acanalado Unissex',
+                category: 'ropa',
+                level: 'Principiante',
+                time: '2 Horas',
+                hook: '5.0 mm',
+                description: 'Gorro cálido y elástico tejido en plano tomando solo la hebra trasera.',
+                image: 'https://images.unsplash.com/photo-1576871337622-98d48d1cf531?auto=format&fit=crop&w=600&q=80',
+                materials: [
+                    '100g lana DK / Worsted suave',
+                    'Ganchillo de 5.0 mm',
+                    'Marcador de puntos'
+                ],
+                abbreviations: ['cad: Cadeneta', 'mpa: Medio Punto Alto', 'HT: Hebra Trasera (BLO)'],
+                steps: [
+                    'Hacer una cadeneta inicial de 35 cad (o el alto deseado del gorro).',
+                    '<strong>F1:</strong> 1 mpa en la 2da cad desde la aguja y en cada punto (34 mpa).',
+                    '<strong>F2 a F40:</strong> 1 cad, girar. 1 mpa en cada punto tomando SOLO la Hebra Trasera (HT).',
+                    'Coser el borde final con el inicial formando un tubo y fruncir la parte superior.'
+                ]
+            },
+            {
+                id: 'pat-4',
+                title: 'Bolso Calado Market Bag',
+                category: 'accesorios',
+                level: 'Intermedio',
+                time: '4 Horas',
+                hook: '4.0 mm',
+                description: 'Bolsa ecológica reutilizable estilo red ideal para compras o paseo.',
+                image: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=600&q=80',
+                materials: [
+                    '150g hilo de algodón 100% rustico',
+                    'Ganchillo 4.0 mm'
+                ],
+                abbreviations: ['cad: Cadeneta', 'pb: Punto Bajo', 'pa: Punto Alto'],
+                steps: [
+                    'Comenzar por la base redonda en punto bajo aumentando progresivamente.',
+                    'Cuerpo: [5 cad, saltar 2 puntos, 1 pb en el siguiente] creando arcos de red.',
+                    'Continuar en espiral hasta alcanzar 30 cm de altura.',
+                    'Asas: Tejer 3 vueltas de pb y hacer dos tiras gruesas de 60 cadenetas.'
+                ]
+            }
+        ];
+
+        // Basic Stitches Data
+        const STITCHES = [
+            {
+                name: 'Cadeneta / Cadena',
+                esAbbr: 'cad',
+                enAbbr: 'ch (chain)',
+                icon: 'fa-link',
+                description: 'El punto base para comenzar casi cualquier proyecto de crochet tejido en plano.',
+                tip: 'Procura mantener una tensión uniforme para que no quede demasiado apretada.'
+            },
+            {
+                name: 'Punto Bajo / Medio Punto',
+                esAbbr: 'pb',
+                enAbbr: 'sc (single crochet)',
+                icon: 'fa-square',
+                description: 'Punto compacto y firme, ideal para amigurumis y piezas bien estructuradas.',
+                tip: 'Inserta la aguja, toma lazada y saca, vuelve a tomar lazada y pasa por ambos bucles.'
+            },
+            {
+                name: 'Medio Punto Alto / Punto Medio',
+                esAbbr: 'mpa',
+                enAbbr: 'hdc (half double crochet)',
+                icon: 'fa-chart-bar',
+                description: 'Tiene una altura intermedia entre el punto bajo y el punto alto. Muy suave.',
+                tip: 'Toma lazada antes de insertar la aguja, luego pasa la lazada por los 3 bucles juntos.'
+            },
+            {
+                name: 'Punto Alto / Vareta',
+                esAbbr: 'pa',
+                enAbbr: 'dc (double crochet)',
+                icon: 'fa-[#8DA399] fa-bars',
+                description: 'Punto alto y elástico, perfecto para mantas, ropa y proyectos calados.',
+                tip: 'Cierra los bucles de dos en dos (pasa por 2, toma lazada, pasa por los últimos 2).'
+            },
+            {
+                name: 'Anillo Mágico',
+                esAbbr: 'AM',
+                enAbbr: 'MR (magic ring)',
+                icon: 'fa-circle-notch',
+                description: 'Técnica circular que permite ajustar el centro sin dejar hoyos.',
+                tip: 'Imprescindible para tejer amigurumis o el centro de los cuadros granny.'
+            },
+            {
+                name: 'Punto Enano / Deslizado',
+                esAbbr: 'pe',
+                enAbbr: 'sl st (slip stitch)',
+                icon: 'fa-minus',
+                description: 'Utilizado para unir vueltas en redondo o rematar bordes de forma discreta.',
+                tip: 'No le da altura a la labor, solo desliza el hilo directamente.'
+            }
+        ];
+
+
+        /* ==========================================================================
+           STATE MANAGEMENT & LOCALSTORAGE
+           ========================================================================== */
+
+        let state = {
+            projects: [],
+            activeProjectId: null,
+            soundEnabled: true,
+            filterCategory: 'all',
+            filterLevel: 'all'
+        };
+
+        // Web Audio API for soft click sound
+        let audioCtx = null;
+
+        function playSoftClick() {
+            if (!state.soundEnabled) return;
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.05);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.05);
+            } catch (e) {
+                // Audio fallback
+            }
+        }
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            loadProjectsFromStorage();
+            renderProjectSelect();
+            renderActiveProject();
+            renderPatterns();
+            renderStitches(STITCHES);
+            setupMobileMenu();
+            calculateYarn();
+        });
+
+        /* ==========================================================================
+           ROW COUNTER FUNCTIONS
+           ========================================================================== */
+
+        function loadProjectsFromStorage() {
+            const saved = localStorage.getItem('crochet_rincon_projects');
+            if (saved) {
+                try {
+                    state.projects = JSON.parse(saved);
+                } catch (e) {
+                    state.projects = [];
+                }
+            }
+
+            // Default Project if empty
+            if (state.projects.length === 0) {
+                const defaultProject = {
+                    id: 'proj-' + Date.now(),
+                    name: 'Mi Primer Proyecto 🧶',
+                    count: 0,
+                    target: 30,
+                    notes: 'Aguja 4mm - Lana terracota',
+                    date: new Date().toLocaleDateString('es-ES', { month: 'short', day: 'numeric' })
+                };
+                state.projects.push(defaultProject);
+                saveProjectsToStorage();
+            }
+
+            state.activeProjectId = state.projects[0].id;
+        }
+
+        function saveProjectsToStorage() {
+            localStorage.setItem('crochet_rincon_projects', JSON.stringify(state.projects));
+            // Show subtle feedback
+            const text = document.getElementById('saved-status-text');
+            if (text) {
+                text.innerHTML = '<i class="fa-solid fa-circle-check text-sage-500 mr-1"></i> Guardado';
+                setTimeout(() => {
+                    text.innerHTML = '<i class="fa-solid fa-floppy-disk mr-1"></i> Guardado automático';
+                }, 2000);
+            }
+        }
+
+        function getActiveProject() {
+            return state.projects.find(p => p.id === state.activeProjectId) || state.projects[0];
+        }
+
+        function renderProjectSelect() {
+            const select = document.getElementById('project-select');
+            const container = document.getElementById('projects-list-container');
+            if (!select || !container) return;
+
+            select.innerHTML = '';
+            container.innerHTML = '';
+
+            state.projects.forEach(p => {
+                // Option
+                const opt = document.createElement('option');
+                opt.value = p.id;
+                opt.textContent = p.name;
+                if (p.id === state.activeProjectId) opt.selected = true;
+                select.appendChild(opt);
+
+                // List Item Quick Selector
+                const item = document.createElement('div');
+                item.className = `p-2.5 rounded-xl text-xs flex items-center justify-between cursor-pointer transition-colors ${
+                    p.id === state.activeProjectId ? 'bg-terracota-100 font-bold text-terracota-700 border border-terracota-200' : 'bg-white hover:bg-gray-100 text-warmdark'
+                }`;
+                item.onclick = () => switchProject(p.id);
+                item.innerHTML = `
+                    <div class="truncate max-w-[150px]">
+                        <span>${p.name}</span>
+                    </div>
+                    <span class="bg-white/80 px-2 py-0.5 rounded-md border text-[11px] font-mono">${p.count}${p.target ? '/' + p.target : ''}</span>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function renderActiveProject() {
+            const proj = getActiveProject();
+            if (!proj) return;
+
+            document.getElementById('active-project-name').textContent = proj.name;
+            document.getElementById('active-project-date').textContent = 'Creado: ' + (proj.date || 'Reciente');
+            document.getElementById('counter-value').textContent = proj.count;
+            document.getElementById('target-display').textContent = proj.target || '--';
+            document.getElementById('target-input').value = proj.target || '';
+            document.getElementById('project-notes').value = proj.notes || '';
+
+            // Update Progress Bar
+            const percent = proj.target && proj.target > 0 ? Math.min(Math.round((proj.count / proj.target) * 100), 100) : 0;
+            document.getElementById('progress-bar').style.width = percent + '%';
+            document.getElementById('progress-percent').textContent = percent + '%';
+
+            renderProjectSelect();
+        }
+
+        function adjustCounter(delta) {
+            playSoftClick();
+            const proj = getActiveProject();
+            if (!proj) return;
+
+            proj.count = Math.max(0, proj.count + delta);
+
+            // Check if reached target
+            if (delta > 0 && proj.target && proj.count === proj.target) {
+                triggerConfetti();
+                showToast(`🎉 ¡Felicidades! Has alcanzado tu meta de ${proj.target} vueltas.`);
+            }
+
+            saveProjectsToStorage();
+            renderActiveProject();
+        }
+
+        function resetCounter() {
+            const proj = getActiveProject();
+            if (!proj) return;
+            proj.count = 0;
+            saveProjectsToStorage();
+            renderActiveProject();
+            showToast('Contador reiniciado a 0');
+        }
+
+        function switchProject(id) {
+            state.activeProjectId = id;
+            renderActiveProject();
+        }
+
+        function updateTarget(val) {
+            const proj = getActiveProject();
+            if (!proj) return;
+            proj.target = parseInt(val) || 0;
+            saveProjectsToStorage();
+            renderActiveProject();
+        }
+
+        function updateNotes(val) {
+            const proj = getActiveProject();
+            if (!proj) return;
+            proj.notes = val;
+            saveProjectsToStorage();
+        }
+
+        function soundToggle() {
+            state.soundEnabled = !state.soundEnabled;
+            const btn = document.getElementById('sound-btn');
+            btn.innerHTML = state.soundEnabled ? '<i class="fa-solid fa-volume-high mr-1"></i> Sonido: ON' : '<i class="fa-solid fa-volume-xmark mr-1"></i> Sonido: OFF';
+        }
+
+        // Modal Project Creation
+        function openNewProjectModal() {
+            document.getElementById('new-project-modal').classList.remove('hidden');
+        }
+
+        function closeNewProjectModal() {
+            document.getElementById('new-project-modal').classList.add('hidden');
+        }
+
+        function createProject() {
+            const nameInput = document.getElementById('new-proj-name');
+            const targetInput = document.getElementById('new-proj-target');
+            const notesInput = document.getElementById('new-proj-notes');
+
+            if (!nameInput.value.trim()) return;
+
+            const newProj = {
+                id: 'proj-' + Date.now(),
+                name: nameInput.value.trim(),
+                count: 0,
+                target: parseInt(targetInput.value) || 0,
+                notes: notesInput.value.trim(),
+                date: new Date().toLocaleDateString('es-ES', { month: 'short', day: 'numeric' })
+            };
+
+            state.projects.push(newProj);
+            state.activeProjectId = newProj.id;
+
+            saveProjectsToStorage();
+            renderActiveProject();
+            closeNewProjectModal();
+
+            // Clear Form
+            nameInput.value = '';
+            targetInput.value = '';
+            notesInput.value = '';
+
+            showToast('¡Nuevo proyecto creado con éxito!');
+        }
+
+        function confirmDeleteProject() {
+            if (state.projects.length <= 1) {
+                showToast('Debes mantener al menos un proyecto activo.');
+                return;
+            }
+
+            const proj = getActiveProject();
+            if (confirm(`¿Estás seguro de que deseas eliminar "${proj.name}"?`)) {
+                state.projects = state.projects.filter(p => p.id !== proj.id);
+                state.activeProjectId = state.projects[0].id;
+                saveProjectsToStorage();
+                renderActiveProject();
+                showToast('Proyecto eliminado');
+            }
+        }
+
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 80,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#D97757', '#8DA399', '#F4F1DE']
+                });
+            }
+        }
+
+
+        /* ==========================================================================
+           YARN CALCULATOR LOGIC
+           ========================================================================== */
+
+        function calculateYarn() {
+            const project = document.getElementById('calc-project').value;
+            const yarn = document.getElementById('calc-yarn').value;
+            const tension = document.getElementById('calc-tension').value;
+            const skeinGrams = parseInt(document.getElementById('calc-skein').value) || 100;
+
+            // Base meters required per project
+            const baseMeters = {
+                manta_m: 1400,
+                manta_l: 2600,
+                jersey: 1100,
+                bufanda: 350,
+                gorro: 180,
+                amigurumi_m: 120,
+                bolso: 400
+            };
+
+            // Multiplier for thickness
+            const yarnMultiplier = {
+                fino: 1.15,
+                medio: 1.0,
+                grueso: 0.85,
+                supergrueso: 0.70
+            };
+
+            // Tension multiplier
+            const tensionMultiplier = {
+                apretada: 1.1,
+                normal: 1.0,
+                holgada: 0.9
+            };
+
+            // Average meters per 100g based on yarn thickness
+            const metersPer100g = {
+                fino: 300,
+                medio: 200,
+                grueso: 120,
+                supergrueso: 70
+            };
+
+            let totalMeters = Math.round(baseMeters[project] * yarnMultiplier[yarn] * tensionMultiplier[tension]);
+            
+            // Calculate total grams
+            let totalGrams = Math.round((totalMeters / metersPer100g[yarn]) * 100);
+            
+            // Calculate skeins
+            let totalSkeins = Math.ceil(totalGrams / skeinGrams);
+
+            // Display Results
+            document.getElementById('res-meters').textContent = `${totalMeters} m`;
+            document.getElementById('res-grams').textContent = `${totalGrams} g`;
+            document.getElementById('res-skeins').textContent = `${totalSkeins} ovillo${totalSkeins > 1 ? 's' : ''}`;
+        }
+
+
+        /* ==========================================================================
+           PATTERNS CATALOG & FILTERS
+           ========================================================================== */
+
+        function renderPatterns() {
+            const grid = document.getElementById('patterns-grid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+
+            const filtered = PATTERNS.filter(p => {
+                const matchCat = state.filterCategory === 'all' || p.category === state.filterCategory;
+                const matchLvl = state.filterLevel === 'all' || p.level === state.filterLevel;
+                return matchCat && matchLvl;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-warmdark/60">
+                        <i class="fa-solid fa-heart-crack text-3xl mb-2 text-terracota-400"></i>
+                        <p>No se encontraron patrones con los filtros seleccionados.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-3xl overflow-hidden border border-terracota-100 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group';
+                card.innerHTML = `
+                    <div>
+                        <div class="relative h-48 overflow-hidden bg-terracota-50">
+                            <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/F5EFE6/D97757?text=Crochet'">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-md text-terracota-700 text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                                ${p.category}
+                            </span>
+                        </div>
+                        <div class="p-5 space-y-3">
+                            <div class="flex items-center gap-2 text-xs text-gray-500">
+                                <span class="bg-sage-100 text-sage-600 font-semibold px-2 py-0.5 rounded-md">${p.level}</span>
+                                <span>•</span>
+                                <span><i class="fa-regular fa-clock mr-1"></i>${p.time}</span>
+                            </div>
+                            <h3 class="font-bold text-lg text-warmdark leading-snug group-hover:text-terracota-600 transition-colors">${p.title}</h3>
+                            <p class="text-xs text-warmdark/70 line-clamp-2">${p.description}</p>
+                        </div>
+                    </div>
+                    <div class="p-5 pt-0">
+                        <button onclick="openPatternModal('${p.id}')" class="w-full bg-crema-50 hover:bg-terracota-500 hover:text-white border border-terracota-200 text-warmdark font-semibold text-xs py-2.5 rounded-xl transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-book-open"></i> Ver Patrón Paso a Paso
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterPatterns(value, type) {
+            if (type === 'category') {
+                state.filterCategory = value;
+                document.querySelectorAll('.filter-cat-btn').forEach(btn => {
+                    if (btn.getAttribute('data-cat') === value) {
+                        btn.className = 'filter-cat-btn active bg-terracota-500 text-white font-medium text-xs sm:text-sm px-4 py-2 rounded-xl transition-all';
+                    } else {
+                        btn.className = 'filter-cat-btn bg-white hover:bg-terracota-100 text-warmdark border border-terracota-200 font-medium text-xs sm:text-sm px-4 py-2 rounded-xl transition-all';
+                    }
+                });
+            } else if (type === 'level') {
+                state.filterLevel = value;
+                document.querySelectorAll('.filter-lvl-btn').forEach(btn => {
+                    if (btn.getAttribute('data-lvl') === value) {
+                        btn.className = 'filter-lvl-btn active bg-warmdark text-white px-3 py-1 rounded-lg';
+                    } else {
+                        btn.className = 'filter-lvl-btn bg-white text-warmdark border border-gray-200 px-3 py-1 rounded-lg';
+                    }
+                });
+            }
+            renderPatterns();
+        }
+
+        function openPatternModal(id) {
+            const pattern = PATTERNS.find(p => p.id === id);
+            if (!pattern) return;
+
+            document.getElementById('modal-category').textContent = pattern.category;
+            document.getElementById('modal-title').textContent = pattern.title;
+            document.getElementById('modal-level').innerHTML = `<i class="fa-solid fa-layer-group text-terracota-500 mr-1"></i> ${pattern.level}`;
+            document.getElementById('modal-time').innerHTML = `<i class="fa-solid fa-clock text-terracota-500 mr-1"></i> ${pattern.time}`;
+            document.getElementById('modal-hook').innerHTML = `<i class="fa-solid fa-wand-sparkles text-terracota-500 mr-1"></i> Aguja ${pattern.hook}`;
+
+            // Render Materials
+            const matList = document.getElementById('modal-materials');
+            matList.innerHTML = pattern.materials.map(m => `<li>${m}</li>`).join('');
+
+            // Render Abbreviations
+            const abbrContainer = document.getElementById('modal-abbreviations');
+            abbrContainer.innerHTML = pattern.abbreviations.map(a => `<span class="bg-terracota-100 text-terracota-700 px-2.5 py-1 rounded-md font-mono">${a}</span>`).join('');
+
+            // Render Steps
+            const stepsContainer = document.getElementById('modal-steps');
+            stepsContainer.innerHTML = pattern.steps.map(s => `<div class="p-2.5 bg-crema-50 rounded-xl border border-terracota-100">${s}</div>`).join('');
+
+            document.getElementById('pattern-modal').classList.remove('hidden');
+        }
+
+        function closePatternModal() {
+            document.getElementById('pattern-modal').classList.add('hidden');
+        }
+
+
+        /* ==========================================================================
+           STITCH DICTIONARY & SEARCH
+           ========================================================================== */
+
+        function renderStitches(stitchesList) {
+            const grid = document.getElementById('stitch-grid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+
+            if (stitchesList.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-8 text-warmdark/60">
+                        <p>No se encontraron puntos con ese nombre o abreviatura.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            stitchesList.forEach(s => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-3xl p-6 border border-terracota-100 shadow-sm space-y-3';
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-2xl bg-terracota-100 text-terracota-600 flex items-center justify-center text-lg">
+                            <i class="fa-solid ${s.icon}"></i>
+                        </div>
+                        <div class="flex gap-1.5 font-mono text-xs">
+                            <span class="bg-terracota-50 text-terracota-700 font-bold px-2 py-0.5 rounded border border-terracota-200">ES: ${s.esAbbr}</span>
+                            <span class="bg-sage-100 text-sage-600 font-bold px-2 py-0.5 rounded">EN: ${s.enAbbr}</span>
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-lg text-warmdark">${s.name}</h3>
+                    <p class="text-xs text-warmdark/70 leading-relaxed">${s.description}</p>
+                    <div class="pt-2 border-t border-gray-100 text-[11px] text-sage-600 font-medium">
+                        💡 <strong>Consejo:</strong> ${s.tip}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function searchStitches(query) {
+            const q = query.toLowerCase().trim();
+            const filtered = STITCHES.filter(s => 
+                s.name.toLowerCase().includes(q) || 
+                s.esAbbr.toLowerCase().includes(q) || 
+                s.enAbbr.toLowerCase().includes(q) ||
+                s.description.toLowerCase().includes(q)
+            );
+            renderStitches(filtered);
+        }
+
+
+        /* ==========================================================================
+           UTILITIES & TOASTS
+           ========================================================================== */
+
+        function setupMobileMenu() {
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            
+            if (btn && menu) {
+                btn.addEventListener('click', () => {
+                    menu.classList.toggle('hidden');
+                });
+
+                document.querySelectorAll('.mobile-link').forEach(link => {
+                    link.addEventListener('click', () => menu.classList.add('hidden'));
+                });
+            }
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            toast.className = 'toast-slide bg-warmdark text-white text-xs font-semibold px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2 pointer-events-auto border border-terracota-500';
+            toast.innerHTML = `<i class="fa-solid fa-heart text-terracota-500"></i> ${message}`;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
